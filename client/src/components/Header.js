@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import Badge from '@material-ui/core/Badge';
 // import Tab from '@material-ui/core/Tab';
 // import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -27,7 +28,8 @@ const lightColor = 'rgba(255, 255, 255, 0.7)';
 const styles = (theme) => ({
 	secondaryBar: {
 		zIndex: 0,
-		minHeight: '6.7vh',
+		paddingTop: theme.spacing(2),
+		paddingBottom: theme.spacing(1.25),
 	},
 	menuButton: {
 		marginLeft: -theme.spacing(1),
@@ -36,8 +38,8 @@ const styles = (theme) => ({
 		padding: 4,
 	},
 	link: {
-		textDecoration: 'none',
-		color: lightColor,
+		'textDecoration': 'none',
+		'color': lightColor,
 		'&:hover': {
 			color: theme.palette.common.white,
 		},
@@ -48,7 +50,7 @@ const styles = (theme) => ({
 });
 
 function Header(props) {
-	const { classes, onDrawerToggle } = props;
+	const { classes, onDrawerToggle, transferCount } = props;
 	const [anchorEl, setAnchorEl] = useState(null);
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -67,15 +69,15 @@ function Header(props) {
 
 	return (
 		<React.Fragment>
-			<AppBar color="primary" position="sticky" elevation={0}>
+			<AppBar color='primary' position='sticky' elevation={0}>
 				{Auth.loggedIn() && (
 					<Toolbar className={classes.secondaryBar}>
-						<Grid container spacing={1} alignItems="center">
+						<Grid container spacing={1} alignItems='center'>
 							<Hidden smUp>
 								<Grid item>
 									<IconButton
-										color="inherit"
-										aria-label="open drawer"
+										color='inherit'
+										aria-label='open drawer'
 										onClick={onDrawerToggle}
 										className={classes.menuButton}
 									>
@@ -89,8 +91,8 @@ function Header(props) {
 									<Link
 										onClick={Auth.logout}
 										className={classes.link}
-										href="#"
-										variant="body2"
+										href='#'
+										variant='body2'
 									>
 										Logout
 									</Link>
@@ -100,9 +102,15 @@ function Header(props) {
 							</Grid>
 							{Auth.loggedIn() && (
 								<Grid item>
-									<Tooltip title="Alerts • No alerts">
-										<IconButton color="inherit">
-											<NotificationsIcon />
+									<Tooltip
+										title={
+											transferCount > 0 ? 'Pending Transfer' : 'No Transfers'
+										}
+									>
+										<IconButton color='inherit'>
+											<Badge badgeContent={transferCount} color='secondary'>
+												<NotificationsIcon />
+											</Badge>
 										</IconButton>
 									</Tooltip>
 								</Grid>
@@ -111,19 +119,22 @@ function Header(props) {
 								<Grid item>
 									<div>
 										<IconButton
-											aria-label="account of current user"
-											aria-controls="menu-appbar"
-											aria-haspopup="true"
+											aria-label='account of current user'
+											aria-controls='menu-appbar'
+											aria-haspopup='true'
 											onClick={handleMenu}
-											color="inherit"
+											color='inherit'
 											className={classes.iconButtonAvatar}
 										>
-											<Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
+											<Avatar
+												src='/static/images/avatar/1.jpg'
+												alt='My Avatar'
+											/>
 
 											{/* <AccountCircle /> */}
 										</IconButton>
 										<Menu
-											id="menu-appbar"
+											id='menu-appbar'
 											anchorEl={anchorEl}
 											anchorOrigin={{
 												vertical: 'top',
@@ -137,10 +148,10 @@ function Header(props) {
 											open={open}
 											onClose={handleClose}
 										>
-											<MenuItem id="profile" onClick={handleClose}>
+											<MenuItem id='profile' onClick={handleClose}>
 												Profile
 											</MenuItem>
-											<MenuItem id="logout" onClick={handleClose}>
+											<MenuItem id='logout' onClick={handleClose}>
 												Logout
 											</MenuItem>
 										</Menu>

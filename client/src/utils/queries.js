@@ -117,35 +117,3 @@ export const QUERY_UPDATE_USER = gql`
             }
           }
  `;
-
- export const QUERY_AREA = gql`
- query Area($areaId: ID!) {
-   detail(areaId: $areaId) {
-     _id
-     name
-     icon
-   }
- }
- `;
- 
- export const QUERY_ATTRIBUTE = gql`
- query Attribute($attributeId: ID!) {
-   detail(attributeId: $attributeId) {
-     _id
-     type
-   }
- }
- `;
- 
- export const QUERY_DETAIL = gql`
- query Detail($detailId: ID!) {
-   detail(detailId: $detailId) {
-     _id
-     key
-     value
-     date
-   }
- }
- `;
- 
-   

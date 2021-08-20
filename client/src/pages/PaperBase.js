@@ -18,9 +18,9 @@ import Auth from '../utils/auth';
 
 function Copyright() {
 	return (
-		<Typography variant="body2" color="textSecondary" align="center">
+		<Typography variant='body2' color='textSecondary' align='center'>
 			{'Copyright © '}
-			<Link color="inherit" href="/">
+			<Link color='inherit' href='/'>
 				HomeFax
 			</Link>{' '}
 			{new Date().getFullYear()}
@@ -72,7 +72,7 @@ theme = {
 				textTransform: 'none',
 			},
 			contained: {
-				boxShadow: 'none',
+				'boxShadow': 'none',
 				'&:active': {
 					boxShadow: 'none',
 				},
@@ -123,8 +123,8 @@ theme = {
 		},
 		MuiListItemIcon: {
 			root: {
-				color: 'inherit',
-				marginRight: 0,
+				'color': 'inherit',
+				'marginRight': 0,
 				'& svg': {
 					fontSize: 20,
 				},
@@ -183,25 +183,25 @@ function Paperbase(props) {
 			<div className={classes.root}>
 				<CssBaseline />
 				<nav className={classes.drawer}>
-					<Hidden smUp implementation="js">
+					<Hidden smUp implementation='js'>
 						<Navigator
 							PaperProps={{ style: { width: drawerWidth } }}
-							variant="temporary"
+							variant='temporary'
 							open={mobileOpen}
 							onClose={handleDrawerToggle}
 						/>
 					</Hidden>
-					<Hidden xsDown implementation="css">
+					<Hidden xsDown implementation='css'>
 						<Navigator PaperProps={{ style: { width: drawerWidth } }} />
 					</Hidden>
 				</nav>
 				<div className={classes.app}>
-					<Header onDrawerToggle={handleDrawerToggle} />
+					<Header onDrawerToggle={handleDrawerToggle} transferCount={0} />
 					<main className={classes.main}>
 						{Auth.loggedIn() ? (
 							content
 						) : (
-							<Grid container alignContent="center" justifyContent="center">
+							<Grid container alignContent='center' justifyContent='center'>
 								<Grid item xs={12}>
 									<div
 										style={{
@@ -210,7 +210,7 @@ function Paperbase(props) {
 											justifyContent: 'center',
 										}}
 									>
-										<SignIn align="center"></SignIn>
+										<SignIn align='center'></SignIn>
 									</div>
 								</Grid>
 							</Grid>
