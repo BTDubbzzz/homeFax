@@ -6,6 +6,8 @@
 
 CarFax for a house.
 
+You can see the website at https://btdubbzzz.github.io/react-portfolio/ or https://blakewright.net
+
 ## User Stories
 
 - AS A Home Owner/Renter, I want to log and retrieve details of the home
