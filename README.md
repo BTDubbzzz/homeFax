@@ -6,7 +6,7 @@
 
 CarFax for a house.
 
-You can see the website at https://bben-homefax.herokuapp.com/ or https://homefax.dev
+You can see the website at https://bben-homefax.herokuapp.com/ or https://www.homefax.dev
 
 ## User Stories
 
