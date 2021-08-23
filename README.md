@@ -6,7 +6,7 @@
 
 CarFax for a house.
 
-You can see the website at https://btdubbzzz.github.io/react-portfolio/ or https://blakewright.net
+You can see the website at https://bben-homefax.herokuapp.com/ or https://homefax.dev
 
 ## User Stories
 
