@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -10,6 +9,8 @@ import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { useMutation } from '@apollo/client';
 import { EDIT_AREA } from '../../utils/mutations';
+import { useStoreContext } from '../../utils/GlobalState';
+import { UPDATE_HOME } from '../../utils/actions';
 
 import Snack from '../Snack';
 
@@ -41,6 +42,7 @@ export default function EditArea({
 	setHome,
 	setEditAreaModalOpen,
 }) {
+	const [state, dispatch] = useStoreContext();
 	const classes = useStyles();
 	const [snack, setSnack] = useState({ status: false, message: '' });
 	const [formState, setFormState] = useState({
@@ -62,7 +64,8 @@ export default function EditArea({
 					},
 				});
 				if (mutationResponse) {
-					console.log(mutationResponse);
+					const stateHome = mutationResponse.data.editArea;
+					dispatch({ type: UPDATE_HOME, home: stateHome });
 					const newHome = {
 						home: {
 							...mutationResponse.data.editArea,
@@ -70,7 +73,10 @@ export default function EditArea({
 					};
 					setHome(newHome);
 					setEditAreaModalOpen(false);
-					setSnack({ status: true, message: `${formState.name} has been updated` });
+					setSnack({
+						status: true,
+						message: `${formState.name} has been updated`,
+					});
 				}
 			} catch (e) {
 				console.log(e);
@@ -88,7 +94,7 @@ export default function EditArea({
 
 	return (
 		<>
-			<Card className={classes.root} variant="outlined">
+			<Card className={classes.root} variant='outlined'>
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
@@ -97,31 +103,35 @@ export default function EditArea({
 								<Divider />
 							</Grid>
 							<Grid item xs={12} s={6}>
-								<form className={classes.inputRoot} noValidate autoComplete="off">
+								<form
+									className={classes.inputRoot}
+									noValidate
+									autoComplete='off'
+								>
 									<div>
 										<TextField
-											id="name"
-											label="Name"
+											id='name'
+											label='Name'
 											defaultValue={areaName}
-											helperText="Area name"
-											variant="standard"
+											helperText='Area name'
+											variant='standard'
 											onChange={handleChange}
 										/>
 										<TextField
 											disabled
-											id="icon"
-											label="Icon"
+											id='icon'
+											label='Icon'
 											defaultValue={areaIcon}
-											helperText="Area icon"
-											variant="standard"
+											helperText='Area icon'
+											variant='standard'
 											onChange={handleChange}
 										/>
 									</div>
 									<Button
-										color="primary"
-										variant="outlined"
-										size="large"
-										type="submit"
+										color='primary'
+										variant='outlined'
+										size='large'
+										type='submit'
 										onClick={handleFormSubmit}
 									>
 										Edit Area

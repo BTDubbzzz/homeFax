@@ -61,19 +61,26 @@ const typeDefs = gql`
 	type Auth {
 		token: ID
 		user: User
+		transfers: [Transfer]
 	}
 
 	type Transfer {
 		_id: ID!
 		transferer: [String]
 		receiver: [String]
-		home: ID!
+		home: Home!
+	}
+
+	type TransferReturn {
+		user: User
+		transfers: [Transfer]
 	}
 
 	type Query {
 		user: User
 		home(homeId: ID!): Home
 		transfers: [Transfer]
+		userTransfers(userEmail: String!): [Transfer]
 		transfer(transferId: ID!): Transfer
 		userTransfer(useremail: String): Transfer
 		area(areaId: ID!): Area
@@ -103,7 +110,7 @@ const typeDefs = gql`
 		addDetail(attributeId: ID!, key: String!, value: String!, date: Date): Home
 		editDetail(detailId: ID!, key: String, value: String, date: Date): Home
 		deleteDetail(detailId: ID!): Home
-		transferHome(transferer: ID, receiver: ID, home: ID!): User
+		transferHome(transferer: String, receiver: String, home: ID!): TransferReturn
 
 		createTransfer(transferer: String, receiver: String, home: ID!): Transfer
 		editTransfer(transferer: String, receiver: String, home: ID!): Transfer

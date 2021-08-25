@@ -9,6 +9,8 @@ import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { useMutation } from '@apollo/client';
 import { EDIT_ATTRIBUTE } from '../../utils/mutations';
+import { useStoreContext } from '../../utils/GlobalState';
+import { UPDATE_HOME } from '../../utils/actions';
 
 import Snack from '../Snack';
 
@@ -39,6 +41,7 @@ export default function EditAttribute({
 	setHome,
 	setAttributeIndex,
 }) {
+	const [state, dispatch] = useStoreContext();
 	const classes = useStyles();
 	const [snack, setSnack] = useState({ status: false, message: '' });
 	const [formState, setFormState] = useState({ attId: attId, type: attType });
@@ -54,7 +57,8 @@ export default function EditAttribute({
 					},
 				});
 				if (mutationResponse) {
-					console.log(mutationResponse);
+					const stateHome = mutationResponse.data.editAttribute;
+					dispatch({ type: UPDATE_HOME, home: stateHome });
 					const newHome = {
 						home: {
 							...mutationResponse.data.editAttribute,
@@ -80,7 +84,7 @@ export default function EditAttribute({
 
 	return (
 		<>
-			<Card className={classes.root} variant="outlined">
+			<Card className={classes.root} variant='outlined'>
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
@@ -89,22 +93,26 @@ export default function EditAttribute({
 								<Divider />
 							</Grid>
 							<Grid item xs={12} s={6}>
-								<form className={classes.inputRoot} noValidate autoComplete="off">
+								<form
+									className={classes.inputRoot}
+									noValidate
+									autoComplete='off'
+								>
 									<div>
 										<TextField
-											id="type"
-											label="Type"
+											id='type'
+											label='Type'
 											defaultValue={attType}
-											helperText="Attribute type"
-											variant="standard"
+											helperText='Attribute type'
+											variant='standard'
 											onChange={handleChange}
 										/>
 									</div>
 									<Button
-										color="primary"
-										variant="outlined"
-										size="large"
-										type="submit"
+										color='primary'
+										variant='outlined'
+										size='large'
+										type='submit'
 										onClick={handleFormSubmit}
 									>
 										Edit Attribute

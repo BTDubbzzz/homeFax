@@ -37,7 +37,9 @@ const resolvers = {
 			throw new AuthenticationError('Not logged in');
 		},
 		home: async (parent, { homeId }) => {
-			return await Home.findById(homeId);
+			const home = await Home.findById(homeId);
+			console.log(home);
+			return home;
 		},
 		transfers: async () => {
 			return await Transfer.find({});
@@ -47,6 +49,9 @@ const resolvers = {
 		},
 		userTransfer: async (parent, { useremail }) => {
 			return await Transfer.findOne({ receiver: useremail });
+		},
+		userTransfers: async (parent, { userEmail }) => {
+			return await Transfer.find({ receiver: userEmail }).populate('home');
 		},
 		area: async (parent, { areaId }) => {
 			return await Home.findOne({ 'areas._id': areaId });
@@ -94,11 +99,8 @@ const resolvers = {
 			return home;
 		},
 		deleteHome: async (parent, args, context) => {
-			if (context.user._id == args.userId) {
-				const home = await Home.findOneAndDelete({ _id: args.homeId });
-				return home;
-			}
-			return;
+			const home = await Home.findOneAndDelete({ _id: args.homeId });
+			return home;
 		},
 		addArea: async (parent, { homeId, name, icon }) => {
 			const home = await Home.findByIdAndUpdate(
@@ -244,23 +246,31 @@ const resolvers = {
 			return home;
 		},
 		transferHome: async (parent, { transferer, receiver, home }, context) => {
-			console.log('transferer :>> ', transferer);
-			console.log('receiver :>> ', receiver);
-			console.log('home :>> ', home);
-			// We need to have a serious discussion about how homes are transfered in our app. At this point it's pretty wide open.
-			console.log('hit');
+			console.log('hit at transferHome');
+			console.log(receiver);
 			if (transferer) {
-				await User.findByIdAndUpdate(transferer, {
-					$pull: { homes: home },
-				});
+				await User.findOneAndUpdate(
+					{ email: transferer },
+					{
+						$pull: { homes: home },
+					}
+				);
 			}
-			if (receiver) {
-				await User.findByIdAndUpdate(receiver, {
-					$addToSet: { homes: home },
-				});
-			}
-			const user = await User.findById(context.user._id).populate('homes');
-			return user;
+			await User.findOneAndUpdate(
+				{ email: receiver },
+				{ $addToSet: { homes: home } }
+			);
+			const newHomeUser = await User.findOne({ email: receiver }).populate(
+				'homes'
+			);
+			console.log(newHomeUser);
+
+			await Transfer.findOneAndDelete({ 'home._id': home._id });
+			const transfers = await Transfer.find({ receiver: receiver }).populate(
+				'home'
+			);
+
+			return { user: newHomeUser, transfers };
 
 			// CODE USED FOR TESTING IN INSOMNIA - PLEASE DON'T DELETE.
 			// let transferUser;
@@ -291,8 +301,12 @@ const resolvers = {
 			throw new AuthenticationError('Not logged in');
 		},
 		createTransfer: async (parent, args) => {
-			console.log('hit');
-			return await await Transfer.create(args);
+			const createTransfer = await Transfer.create(args);
+			const newTransferId = createTransfer._id;
+			const newTransfer = await Transfer.findById(newTransferId).populate(
+				'home'
+			);
+			return newTransfer;
 		},
 		editTransfer: async (parent, args) => {
 			return await Transfer.findOneAndUpdate({ home: args.home }, args, {
@@ -309,24 +323,18 @@ const resolvers = {
 			if (!user) {
 				throw new AuthenticationError('Incorrect credentials');
 			}
-
 			const correctPw = await user.isCorrectPassword(password);
 
 			if (!correctPw) {
 				throw new AuthenticationError('Incorrect credentials');
 			}
-
 			const token = signToken(user);
-
-			return { token, user };
+			const receiverEmail = user.email;
+			const transfers = await Transfer.find({
+				receiver: receiverEmail,
+			}).populate('home');
+			return { token, user, transfers };
 		},
-		// updateEmail: async (parent, args, context) => {
-		// 	if (context.user) {
-		// 		return await User.findByIdAndUpdate(context.user._id, args, { new: true });
-		// 	}
-
-		// 	throw new AuthenticationError('Not logged in');
-		// },
 		updatePassword: async (parent, args, context) => {
 			if (context.user) {
 				const foundUser = await User.findById(context.user._id);
@@ -343,7 +351,6 @@ const resolvers = {
 					...foundUser,
 					password: hashedPassword,
 				};
-				console.log(args.currentPassword);
 				const user = await User.findByIdAndUpdate(context.user._id, foundUser, {
 					new: true,
 				});

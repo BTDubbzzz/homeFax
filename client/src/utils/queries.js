@@ -43,6 +43,7 @@ export const QUERY_GET_HOME = gql`
 		home(homeId: $homeId) {
 			_id
 			address {
+				_id
 				street1
 				street2
 				city
@@ -80,14 +81,35 @@ export const QUERY_TRANSFERS = gql`
 `;
 
 export const QUERY_USER_TRANSFERS = gql`
-	query Transfers($useremail: String!) {
-		userTransfers(useremail: $useremail) {
-			_id
-			transferer
-			receiver
-			home
-		}
+query Transfers($userEmail: String!) {
+	userTransfers(userEmail: $userEmail) {
+		_id
+		transferer
+		receiver
+		home {
+	_id
+	address {
+	  _id
+	  street1
+	  street2
+	  city
+	  state
+	  zip
 	}
+  }
+	}
+}
+`;
+
+export const QUERY_ALL_USER_TRANSFERS = gql`
+query Transfers($userEmail: String!) {
+	userTransfers(userEmail: $userEmail) {
+		_id
+		transferer
+		receiver
+		home
+	}
+}
 `;
 
 export const QUERY_SINGLE_TRANSFER = gql`

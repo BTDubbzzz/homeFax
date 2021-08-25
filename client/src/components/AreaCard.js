@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import { useQuery } from '@apollo/client';
-import { QUERY_USER } from '../utils/queries';
-import HomeIcon from '@material-ui/icons/Home';
 import Modal from './Modal';
-import HomeList from './HomeList';
 import { useParams } from 'react-router-dom';
 import { CardHeader } from '@material-ui/core';
 import { Collapse } from '@material-ui/core';
@@ -39,7 +35,6 @@ export default function AreaCard({ area, i }) {
 	const classes = useStyles();
 	const { homeid } = useParams();
 	const [expandedId, setExpandedId] = useState(-1);
-	const [open, setOpen] = useState(false);
 	const [modalIndex, setModalIndex] = useState(-1);
 
 	const { loading, error, data } = useQuery(QUERY_GET_HOME, {
@@ -52,7 +47,6 @@ export default function AreaCard({ area, i }) {
 	}
 
 	if (!loading) {
-		// console.log('data :>> ', data);
 	}
 
 	const handleModalOpen = (i) => {
@@ -60,9 +54,7 @@ export default function AreaCard({ area, i }) {
 	};
 
 	const handleExpandClick = (i) => {
-		console.log('i before state :>> ', expandedId);
 		setExpandedId(expandedId === i ? -1 : i);
-		console.log('i after state :>> ', expandedId);
 	};
 
 	return (
@@ -72,7 +64,6 @@ export default function AreaCard({ area, i }) {
 					<Link
 						style={{ cursor: 'pointer' }}
 						onClick={() => {
-							console.log('i :>> ', i);
 							handleExpandClick(i);
 						}}
 					>
@@ -92,15 +83,10 @@ export default function AreaCard({ area, i }) {
 					{area.attributes.map((attribute, j) => (
 						<React.Fragment>
 							<Grid item xs={12}>
-								<Typography gutterBottom="true" variant="p" xs={12}>
+								<Typography gutterBottom='true' variant='p' xs={12}>
 									<Link
 										onClick={() => {
-											console.log('i :>> ', i);
-											console.log('j :>> ', j);
-											console.log('modalIndex :>> ', modalIndex);
-											console.log('expandedId :>> ', expandedId);
 											handleModalOpen(j);
-											console.log('modalIndex :>> ', modalIndex);
 										}}
 										style={{ textDecoration: 'none', cursor: 'pointer' }}
 									>
@@ -123,8 +109,8 @@ export default function AreaCard({ area, i }) {
 							</Grid>
 						</React.Fragment>
 					))}
-					<Typography variant="p">
-						<Button variant="contained" color="primary">
+					<Typography variant='p'>
+						<Button variant='contained' color='primary'>
 							Add Attribute
 						</Button>
 					</Typography>

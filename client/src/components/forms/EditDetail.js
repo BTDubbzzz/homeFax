@@ -9,6 +9,8 @@ import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { useMutation } from '@apollo/client';
 import { EDIT_DETAIL } from '../../utils/mutations';
+import { useStoreContext } from '../../utils/GlobalState';
+import { UPDATE_HOME } from '../../utils/actions';
 
 import Snack from '../Snack';
 
@@ -41,10 +43,7 @@ export default function EditDetail({
 	setHome,
 	setDetailIndex,
 }) {
-	console.log('detailId :>> ', detailId);
-	console.log('detailKey :>> ', detailKey);
-	console.log('detailValue :>> ', detailValue);
-	console.log('detailDate :>> ', detailDate);
+	const [state, dispatch] = useStoreContext();
 	const classes = useStyles();
 	const [snack, setSnack] = useState({ status: false, message: '' });
 	const [formState, setFormState] = useState({
@@ -67,6 +66,8 @@ export default function EditDetail({
 					},
 				});
 				if (mutationResponse) {
+					const stateHome = mutationResponse.data.editDetail;
+					dispatch({ type: UPDATE_HOME, home: stateHome });
 					const newHome = {
 						home: {
 							...mutationResponse.data.editDetail,
@@ -94,7 +95,7 @@ export default function EditDetail({
 
 	return (
 		<>
-			<Card className={classes.root} variant="outlined">
+			<Card className={classes.root} variant='outlined'>
 				<CardContent>
 					<div className={classes.gridRoot}>
 						<Grid container spacing={1}>
@@ -103,48 +104,52 @@ export default function EditDetail({
 								<Divider />
 							</Grid>
 							<Grid item xs={12} s={6}>
-								<form className={classes.inputRoot} noValidate autoComplete="off">
+								<form
+									className={classes.inputRoot}
+									noValidate
+									autoComplete='off'
+								>
 									<div>
 										<TextField
-											id="key"
-											label="Detail"
+											id='key'
+											label='Detail'
 											defaultValue={detailKey}
-											helperText="Attribute detail"
-											variant="standard"
+											helperText='Attribute detail'
+											variant='standard'
 											onChange={handleChange}
 										/>
 										<TextField
-											id="value"
-											label="Value"
+											id='value'
+											label='Value'
 											defaultValue={detailValue}
-											helperText="Attribute detail value"
+											helperText='Attribute detail value'
 											onChange={handleChange}
-											variant="standard"
+											variant='standard'
 										/>
 										{detailDate ? (
 											<TextField
-												id="date"
-												type="date"
+												id='date'
+												type='date'
 												defaultValue={detailDate}
-												helperText="Associated date"
-												variant="standard"
+												helperText='Associated date'
+												variant='standard'
 												onChange={handleChange}
 											/>
 										) : (
 											<TextField
-												id="date"
-												type="date"
-												helperText="Associated date"
-												variant="standard"
+												id='date'
+												type='date'
+												helperText='Associated date'
+												variant='standard'
 												onChange={handleChange}
 											/>
 										)}
 									</div>
 									<Button
-										color="primary"
-										variant="outlined"
-										size="large"
-										type="submit"
+										color='primary'
+										variant='outlined'
+										size='large'
+										type='submit'
 										onClick={handleFormSubmit}
 									>
 										Edit Detail

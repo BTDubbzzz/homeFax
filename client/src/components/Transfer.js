@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-// import Snack from './Snack';
 import Auth from '../utils/auth';
 import {
 	Card,
@@ -42,15 +41,13 @@ const useStyles = makeStyles((theme) => ({
 
 function Transfer({ home, setTransferModalOpen }) {
 	const { email } = Auth.getProfile().data;
-
 	const classes = useStyles();
 	const [formState, setFormState] = useState({
 		transferEmail: '',
 	});
-	// const [snack, setSnack] = useState({ status: false, message: '' });
+
 	const [createTransfer, { error }] = useMutation(CREATE_TRANSFER);
 
-	// NEED TO CATCH THE INPUT FROM SUBMIT
 	const handleChange = (event) => {
 		const { id, value } = event.target;
 		setFormState({
@@ -63,9 +60,6 @@ function Transfer({ home, setTransferModalOpen }) {
 		event.preventDefault();
 		if (formState.transferEmail) {
 			try {
-				console.log('transferer :>> ', 'test');
-				console.log('receiver :>> ', formState.transferEmail);
-				console.log('homeId :>> ', home._id);
 				const mutationResponse = await createTransfer({
 					variables: {
 						transferer: email,
@@ -74,12 +68,7 @@ function Transfer({ home, setTransferModalOpen }) {
 					},
 				});
 				if (mutationResponse) {
-					console.log(mutationResponse);
 					setTransferModalOpen(false);
-					// setSnack({
-					// 	status: true,
-					// 	message: `${formState.transferEmail} has been added to transfer`,
-					// });
 				}
 			} catch (e) {
 				console.log(e);

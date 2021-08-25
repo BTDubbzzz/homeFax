@@ -20,7 +20,6 @@ module.exports = {
 		// if token can be verified, add the decoded user's data to the request so it can be accessed in the resolver
 		try {
 			const { data } = jwt.verify(token, secret, { maxAge: expiration });
-			console.log(`Data: ${data}`);
 			req.user = data;
 		} catch {
 			console.log('Invalid token');

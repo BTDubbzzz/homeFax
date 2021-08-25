@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from "react";
-import { useHFReducer } from './reducers'
+import { useHFReducer } from './reducers';
 
 const StoreContext = createContext();
 const StoreProvider = (props) => {
